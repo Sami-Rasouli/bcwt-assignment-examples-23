@@ -1,0 +1,25 @@
+{
+  "name": "bcwt-assigment-examples-23",
+  "version": "0.0.1",
+  "description": "bcwt-assigment-examples\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[3~\u001b[3~\u001b[3~\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C: exapmles-23",
+  "main": "node.js",
+  "dependencies": {
+    "ladash": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "docs": "mkdir docs && touch docs/readme.md",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sami-Rasouli/bcwt-assignment-examples-23.git"
+  },
+  "author": "Sami <sami.rasouli@icloud.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sami-Rasouli/bcwt-assignment-examples-23/issues"
+  },
+  "homepage": "https://github.com/Sami-Rasouli/bcwt-assignment-examples-23#readme"
+}

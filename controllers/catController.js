@@ -26,7 +26,7 @@ const postCat = (req, res) => {
     console.log('posting a cat', req.body, req.file);
 // TODO: add cat details to cats array
     const newCat = req.body;
-    newCat.filename = 'http://localhost:3000/' + req.file.path;
+    newCat.filename = 'http://localhost:3000/uploads/' + req.file.filename;
     cats.push(newCat);
     // TODO: send correct response if upload successful
 

@@ -1,57 +1,66 @@
 'use strict';
 const userModel = require('../models/userModel');
 
+// TODO: add DB connection and functions to userModel
 const users = userModel.users;
-// remove passwords
-for (const user of users) {
-    delete user.password;
-}
+
 
 const getUserList = (req, res) => {
-    res.json(users);
+  res.json(users);
 };
 
-const getUser = (req, res) => {
-    //console.log(req.params);
-    const id = req.params.userId;
-    // filter matching user(s) based on id
-    const filteredUsers = users.filter(user => id == user.id);
-    if (filteredUsers.length > 0) {
-        res.json(filteredUsers[0]);
-    } else {
-        // send response 404 if id not found in array res.sendStatus(404);
-        res
-            .status(404)
-            .json({message: 'User not found.'})
-    }
+const getUser = async (req, res) => {
+  //console.log(req.params);
+ const userId = (req.params.userId);
+
+  try{
+    const [user] = await userModel.getUserById(userId);
+    console.log('getCat', user);
+    res.json(user);
+  }catch(e){
+    res.status(404).json({message: 'User Not Found.'})
+    console.error('error', e.message);
+    throw new Error ('sql User Not Found.')
+  }
 };
 
-const postUser = (req, res) => {
-    console.log('req body: ', req.body);
-    const newUser = {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.passwd
-    };
-    users.push(newUser);
-    res
-        .status(201)
-        .send('Added user ' + req.body.name);
+const postUser = async(req, res) => {
+  console.log('posting a user: ', req.body);
+  const newUser = req.body;
+  try{
+    const result = await userModel.insertUser(newUser);
+    res.status(201).json('new User Added!'); 
+  }catch(e){
+    res.status(404).send('adding a User failed'); 
+    console.error('error', e.message);
+    throw new Error('sql posting a User failed');
+  }
 };
 
-const putUser = (req, res) => {
-    res.send('With this endpoint you can modify a user');
+const putUser = async (req, res) => {
+  console.log('modifying a User', req.body);
+  try{
+    const user = req.body;
+    const result = await userModel.modifyUser(user);
+    res.status(200).send('cat modified!');
+  }catch(e){
+    res.status(404).send('User modified failed!');
+    console.error('error', e.message);
+    throw new Error('sql user modified failed!')
+  }
 };
 
-const deleteUser = (req, res) => {
-    res.send('With this endpoint you can delete a user');
+const deleteUser = async (req, res) => {
+  console.log('deleteing a User', req.params.userId);
+  try{
+    const result = await userModel.deleteUser(req.params.userId);
+    res.status(200).send('User deleted!');
+  }catch(e){
+    res.status(200).send('user delete failed!');
+    console.error('error', e.message);
+    throw new Error('sql delete user failed');
+  }
 };
 
-const userController = {
-    getUserList,
-    getUser,
-    postUser,
-    putUser,
-    deleteUser
-};
+const userController = {getUserList, getUser, postUser, putUser, deleteUser};
 module.exports = userController;

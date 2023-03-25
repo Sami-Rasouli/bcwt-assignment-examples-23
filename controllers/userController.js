@@ -5,8 +5,13 @@ const userModel = require('../models/userModel');
 const users = userModel.users;
 
 
-const getUserList = (req, res) => {
-  res.json(users);
+const getUserList = async (req, res) => {
+  try{
+    const users = await userModel.getAllUsers();  
+    res.json(users);
+  }catch(e){
+    res.status(500).json({error: 500, message: e.message});
+  }
 };
 
 const getUser = async (req, res) => {

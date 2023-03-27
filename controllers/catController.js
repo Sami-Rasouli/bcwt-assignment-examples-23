@@ -47,7 +47,7 @@ const postCat = async (req, res) => {
     // TODO: add try-catch
     const result = await catModel.insertCat(newCat);
     // send correct response if upload successful
-    res.status(201).json('new cat added!');
+    res.status(201).json({message: 'new cat added!'});
   }catch(error){
     res.status(500).json({error: 500, message: error.message});
   }

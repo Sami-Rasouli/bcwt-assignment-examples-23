@@ -21,7 +21,7 @@ const getUser = async (req, res) => {
 
     try {
         const [user] = await userModel.getUserById(userId);
-        console.log('getCat', user);
+        console.log('getUser', user);
         res.json(user);
     } catch (e) {
         res
@@ -36,15 +36,15 @@ const postUser = async (req, res) => {
     console.log('posting a user: ', req.body);
     const newUser = req.body;
     try {
-        const result = await userModel.insertUser(newUser);
+     //   const result = await userModel.insertUser(newUser);
         res
             .status(201)
             .json('new User Added!');
-    } catch (e) {
+    } catch (error) {
         res
             .status(404)
             .send('adding a User failed');
-        console.error('error', e.message);
+        console.error('error', error.message);
         throw new Error('sql posting a User failed');
     }
 };

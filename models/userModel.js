@@ -47,7 +47,7 @@ const insertUser = async (user) => {
 
 const modifyUser = async(user) => {
   try{
-    const sql = `UPDATE wop_cat SET name=?, email=?, password=? roll=? WHERE user_id=?`;
+    const sql = `UPDATE wop_user SET name=?, email=?, password=? roll=? WHERE user_id=?`;
     const [rows] = await promisePool.query(sql, [
       user.name,
       user.email,

@@ -17,7 +17,7 @@ const getUserList = async (req, res) => {
 //TODO:
 const getUser = async (req, res) => {
     //console.log(req.params);
-    const userId = (req.params.userId);
+    const userId = (req.params.id);
 
     try {
         const [user] = await userModel.getUserById(userId);
@@ -67,9 +67,9 @@ const putUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-    console.log('deleteing a User', req.params.userId);
+    console.log('deleteing a User', req.params.id);
     try {
-        const result = await userModel.deleteUser(req.params.userId);
+        const result = await userModel.deleteUser(req.params.id);
         res
             .status(200)
             .send('User deleted!');

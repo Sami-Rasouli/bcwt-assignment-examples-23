@@ -20,7 +20,7 @@ const getCatList = async (req, res) => {
 const getCat = async (req, res) => {
   //console.log(req.params);
   // convert id value to number
-  const catId = Number(req.params.catId);
+  const catId = Number(req.params.id);
   // check if number is not an integer
   if (!Number.isInteger(catId)) {
     res.status(400).json({error: 500, message: 'invalid id'});
@@ -68,10 +68,10 @@ const putCat = async (req, res) => {
 };
 
 const deleteCat = async (req, res) => {
-  console.log('deleting a cat', req.params.catId);
+  console.log('deleting a cat', req.params.id);
   // TODO: add try-catch
   try{
-    const result = await catModel.deleteCat(req.params.catId);
+    const result = await catModel.deleteCat(req.params.id);
     // send correct response if upload successful
     res.status(200).json('cat deleted!');
   }catch(error){

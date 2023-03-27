@@ -6,7 +6,7 @@ const getAllUsers = async () => {
    
     try {
 
-      const sql = `SELECT * FROM wop_user`;
+      const sql = `SELECT user_id, name, email FROM wop_user`;
       const [rows] = await promisePool.query(sql);
       return rows;
 

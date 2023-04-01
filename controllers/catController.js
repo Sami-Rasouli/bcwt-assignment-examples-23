@@ -64,7 +64,7 @@ const postCat = async (req, res) => {
     // TODO: add try-catch
     const result = await catModel.insertCat(newCat);
     // send correct response if upload successful
-    res.status(201).json('new cat added!');
+    res.status(201).json({message: 'new cat added!'});
   }catch(error){
     res.status(500).json({error: 500, message: error.message});
   }
@@ -77,7 +77,7 @@ const putCat = async (req, res) => {
   if(!validationError.isEmpty()){
     res.status(400).json({status: 400,
       errors: validationError.array(),
-      message: 'Invalid data'
+      message: 'Invalid Data'
     });
       return;
   }

@@ -19,8 +19,7 @@ const upload = multer({dest: 'uploads/', fileFilter});
 
 
 //ROOT of cat endpoing (e.g. http://localhost:3000/cat)
-router
-    .route('/')
+router.route('/')
     .get(catController.getCatList)
     .post(
         upload.single('cat'),

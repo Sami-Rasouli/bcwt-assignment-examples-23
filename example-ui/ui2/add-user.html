@@ -27,7 +27,7 @@
                 <div class="form-wrapper">
                     <h3>Add user</h3>
                     <form
-                        action="http://localhost:3000/user"
+                        action="https://bcwt-servers.eastus.cloudapp.azure.com/app/user"
                         method="post"
                         class="light-border"
                         id="addUserForm">
@@ -38,6 +38,7 @@
                             minlength="3"
                             maxlength="30"
                             placeholder="Name"
+                            pattern="[a-zöäA-ZÖÄÅ0-9\s]*"
                             required="required">
                         <input
                             class="light-border"
@@ -50,7 +51,9 @@
                             type="password"
                             name="passwd"
                             minlength="8"
-                            pattern="[a-zöäA-ZÖÄÅ0-9]\{8}"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+{};:,<.>/?]).{8,}$"
+                            title="Password must be at least 8 characters long and include at least one lowercase letter, 
+                            one uppercase letter, one number, and one special character"
                             placeholder="Password"
                             required="required">
                         <button class="light-border" type="submit">Save</button>
@@ -63,3 +66,8 @@
     </body>
 
 </html>
+
+<!--
+    link 1 = https://bcwt-servers.eastus.cloudapp.azure.com/app/user
+    link 2 = http://localhost:3000/user
+-->

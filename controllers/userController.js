@@ -1,5 +1,6 @@
 'use strict';
 const userModel = require('../models/userModel');
+const {validationResult} = require('express-validator');
 
 // TODO: add DB connection and functions to userModel
 
@@ -9,9 +10,7 @@ const getUserList = async (req, res) => {
 
         res.json(users);
     } catch (e) {
-        res
-            .status(500)
-            .json({error: 500, message: e.message});
+        res.status(500).json({error: 500, message: e.message});
     }
 };
 //TODO:
@@ -24,9 +23,7 @@ const getUser = async (req, res) => {
         console.log('getUser', user);
         res.json(user);
     } catch (e) {
-        res
-            .status(404)
-            .json({message: 'User Not Found.'})
+        res.status(404).json({message: 'User Not Found.'})
         console.error('error', e.message);
         throw new Error('sql User Not Found.')
     }
@@ -34,16 +31,22 @@ const getUser = async (req, res) => {
 
 const postUser = async (req, res) => {
     console.log('posting a user: ', req.body);
-    const newUser = req.body;
+    const validationError = validationResult(req);
+    if(!validationError.isEmpty()){
+        res.status(400).json({
+            status: 400,
+            errors: validationError.array(),
+            message: 'Invalid Data'
+        });
+        console.log('posting user Error: ', validationError)
+        return;
+    }
     try {
-     //   const result = await userModel.insertUser(newUser);
-        res
-            .status(201)
-            .json('new User Added!');
+        const newUser = req.body;
+        const result = await userModel.insertUser(newUser);
+        res.status(201).json({message: 'new User Added!'});
     } catch (error) {
-        res
-            .status(404)
-            .send('adding a User failed');
+        res.status(404).send('adding a User failed');
         console.error('error', error.message);
         throw new Error('sql posting a User failed');
     }
@@ -51,16 +54,20 @@ const postUser = async (req, res) => {
 //TODO: update for new user model
 const putUser = async (req, res) => {
     console.log('modifying a User', req.body);
+    const validationError = validationResult(req);
+    if(!validationError.isEmpty()){
+        res.status(400).json({status: 400,
+        errors: validationError.array(),
+        message: 'Invalid Data!' 
+        });
+        return;
+    }
     try {
         const user = req.body;
         const result = await userModel.modifyUser(user);
-        res
-            .status(200)
-            .send('cat modified!');
+        res.status(200).send('cat modified!');
     } catch (e) {
-        res
-            .status(404)
-            .send('User modified failed!');
+        res.status(404).send('User modified failed!');
         console.error('error', e.message);
         throw new Error('sql user modified failed!')
     }
@@ -70,13 +77,9 @@ const deleteUser = async (req, res) => {
     console.log('deleteing a User', req.params.id);
     try {
         const result = await userModel.deleteUser(req.params.id);
-        res
-            .status(200)
-            .send('User deleted!');
+        res.status(200).send('User deleted!');
     } catch (e) {
-        res
-            .status(200)
-            .send('user delete failed!');
+        res.status(200).send('user delete failed!');
         console.error('error', e.message);
         throw new Error('sql delete user failed');
     }

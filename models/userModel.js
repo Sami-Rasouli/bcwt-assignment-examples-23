@@ -29,15 +29,14 @@ const getUserById = async (id) => {
 
 const insertUser = async (user) => {
   try{
-    const sql = `INSERT INTO wop_user VALUES (?,?,?,?,?)`;
+    const sql = `INSERT INTO wop_user VALUES (?, ?, ?, ?, ?)`;
     const [rows] = await promisePool.query(sql, [
-      null, // id is Auto_Increment
+       null,// id is Auto_Increment
       user.name,
       user.email,
       user.passwd,
       0,
     ]);
-
     return rows;
   }catch(e){
     console.error('error', e.message);

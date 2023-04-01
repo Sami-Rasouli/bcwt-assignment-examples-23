@@ -1,5 +1,7 @@
 'use strict';
-const url = 'http://localhost:3000'; // change url when uploading to server
+const url1 = 'http://localhost:3000'; // change url when uploading to server
+const url = 'https://bcwt-servers.eastus.cloudapp.azure.com/app/'; // change url when uploading to server
+
 
 // get query parameter
 const getQParam = (param) => {

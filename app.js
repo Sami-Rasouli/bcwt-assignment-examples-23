@@ -14,6 +14,7 @@ app.use((req, res, next) => {
 
 // Serve example-ui
 app.use(express.static('example-ui'));
+//for azure app.use('/', express.static('example-ui'));
 // for do /upload/show picture
 //serve image files
 app.use('/uploads',express.static('uploads'));

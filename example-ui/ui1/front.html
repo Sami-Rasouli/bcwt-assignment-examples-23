@@ -14,7 +14,7 @@
       <!-- js creates list here -->
     </ul>
     <h3>Add user</h3>
-    <form action="https://bcwt-servers.eastus.cloudapp.azure.com/app/user" method="post" class="light-border">
+    <form action="http://localhost:3000/user" method="post" class="light-border">
       <input class="light-border" type="text" name="name" placeholder="Name">
       <input class="light-border" type="text" name="email" placeholder="email">
       <input class="light-border" type="text" name="passwd" placeholder="Password">
@@ -25,7 +25,7 @@
          local => <form action="http://localhost:3000/cat" method="post" enctype="multipart/form-data" class="light-border">
          Web   => <form action="https://bcwt-servers.eastus.cloudapp.azure.com/app/cat" method="post" enctype="multipart/form-data" class="light-border">
     -->
-    <form action="https://bcwt-servers.eastus.cloudapp.azure.com/app/cat" method="post" enctype="multipart/form-data" class="light-border">
+    <form action="http://localhost:3000/cat" method="post" enctype="multipart/form-data" class="light-border">
       <input class="light-border" type="text" name="name" placeholder="Name">
       <input class="light-border" type="text" name="birthdate" placeholder="Birthdate">
       <input class="light-border" type="text" name="weight" placeholder="Weight">

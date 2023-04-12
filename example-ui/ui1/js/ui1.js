@@ -1,7 +1,6 @@
 'use strict';
 // const url = 'http://localhost:3000'; // change url when uploading to server¨
-import {homelink} from '../../../links/links.js';
-const url = homelink;
+const url = 'http://localhost:3000';
 const imgPath = url + '/uploads/';
 
 const ul = document.querySelector('ul');

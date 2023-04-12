@@ -93,8 +93,8 @@ const putCat = async (req, res) => {
 };
 
 const deleteCat = async (req, res) => {
+  // console.log('deleting a cat', req.params.id);
   console.log('deleting a cat', req.params.id);
-  // TODO: add try-catch
   try{
     const result = await catModel.deleteCat(req.params.id);
     // send correct response if upload successful

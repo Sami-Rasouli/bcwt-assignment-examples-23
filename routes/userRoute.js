@@ -24,7 +24,7 @@ router
             ' number, and one special character'
         ),
         userController.putUser)
-
+router.get('/token', userController.checkToken);
 router
     .route('/:id')
     .get(userController.getUser)

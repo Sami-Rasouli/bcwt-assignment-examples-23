@@ -15,18 +15,21 @@ app.use((req, res, next) => {
 });
 
 // Serve example-ui
-//its for localhost: app.use(express.static('example-ui'));
-app.use('/', express.static('example-ui'));
-//for azure app.use('/', express.static('example-ui'));
-// for do /upload/show picture
-//serve image files
-app.use('/uploads',express.static('uploads'));
-// Add 'Access-Control-Allow-Origin: *' header to all responses using cors
-// middleware
+app.use(express.static('example-ui'));
+// Serve uploaded image files
+//app.use('/uploads', express.static('uploads'));
+// Serve uploaded image files (example-ui compliant using root route)
+app.use(express.static('uploads'));
+// serve thumbnails
+app.use('/thumbnails', express.static('thumbnails'));
+
+// Add 'Access-Control-Allow-Origin: *' header to all
+// responses using cors middleware
 app.use(cors());
 // middleware for parsing request body
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+// Use passport for authentication
 app.use(passport.initialize());
 
 app.use('/auth', authRoute);

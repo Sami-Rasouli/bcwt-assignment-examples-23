@@ -8,7 +8,7 @@ const getAllCats = async () => {
     const sql = `SELECT wop_cat.*, wop_user.name AS ownername FROM wop_cat
                 LEFT JOIN wop_user ON wop_cat.owner = wop_user.user_id`;
     const [rows] = await promisePool.query(sql);
-    // console.log(rows);
+    console.log(rows);
     return rows;
   } catch (e) {
     console.error('error', e.message);
@@ -49,16 +49,17 @@ const insertCat = async (cat) => {
   }
 };
 
-const modifyCat = async (cat) => {
+const modifyCat = async (cat, userId) => {
   try {
     const sql = `UPDATE wop_cat SET name=?, weight=?, owner=?, birthdate=?
-                WHERE cat_id=?`;
+                WHERE cat_id=? AND owner=?`;
     const [rows] = await promisePool.query(sql, [
       cat.name,
       cat.weight,
       cat.owner,
       cat.birthdate,
-      cat.id
+      cat.id,
+      userId
     ]);
     // console.log(rows);
     return rows;
@@ -68,10 +69,11 @@ const modifyCat = async (cat) => {
   }
 };
 
-const deleteCat = async (id) => {
+const deleteCat = async (id, userId) => {
+  // TODO: delete the file itself
   try {
-    const sql = `DELETE FROM wop_cat WHERE cat_id=?`;
-    const [rows] = await promisePool.query(sql, [id]);
+    const sql = `DELETE FROM wop_cat WHERE cat_id=? AND owner=?`;
+    const [rows] = await promisePool.query(sql, [id, userId]);
     // console.log(rows);
     return rows;
   } catch (e) {

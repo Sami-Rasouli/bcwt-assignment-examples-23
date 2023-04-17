@@ -28,37 +28,26 @@ const getUserById = async (id) => {
 };
 
 const insertUser = async (user) => {
-  try{
-    const sql = `INSERT INTO wop_user VALUES (?, ?, ?, ?, ?)`;
-    const [rows] = await promisePool.query(sql, [
-       null,// id is Auto_Increment
-      user.name,
-      user.email,
-      user.passwd,
-      0,
-    ]);
-    return rows;
-  }catch(e){
+  try {
+    const sql = 'INSERT INTO wop_user VALUES (null, ?, ?, ?, ?)';
+    const values = [user.name, user.email, user.password, user.role];
+    const [result] = await promisePool.query(sql, values);
+    return result.insertId;
+  } catch (e) {
     console.error('error', e.message);
-    throw new Error('sql insert user failed');
+    throw new Error('sql query failed');
   }
 };
 
 const modifyUser = async(user) => {
   try{
-    const sql = `UPDATE wop_user SET name=?, email=?, password=? roll=? WHERE user_id=?`;
-    const [rows] = await promisePool.query(sql, [
-      user.name,
-      user.email,
-      user.passwd,
-      0,
-      user.id
-    ]);
-
-    return rows;
-  } catch(e){
+    const sql = `UPDATE wop_user SET name=?, email=?, password=?, role=? WHERE user_id=?`;
+    const values = [user.user_id, user.name, user.email, user.passwd, user.role];
+    const [result] = await promisePool.query(sql, values);
+    return result.insertId;
+  } catch (e) {
     console.error('error', e.message);
-    throw new Error('sql Update User Failed');
+    throw new Error('sql query failed');
   }
 };
 

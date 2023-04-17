@@ -1,17 +1,17 @@
 'use strict';
 const catModel = require('../models/catModel');
 const {validationResult} = require('express-validator');
+const {makeThumbnail} = require('../utils/image');
 
 const getCatList = async (req, res) => {
   try {
-    let cats = await catModel.getAllCats();
-    //console.log(cats);
-    // convert ISQ date to date only
-    // should this be done on the front-end side??
-    cats = cats.map(cat => {
-      cat.birthdate = cat.birthdate.toISOString().split('T')[0];
-      return cat;
-    });
+    const cats = await catModel.getAllCats();
+    // Functionality below is now done in 'db.js' by 'dateStrings: true' setting
+    // convert ISO date to date only
+    // cats = cats.map((cat) => {
+    //   cat.birthdate = cat.birthdate.toISOString().split('T')[0];
+    //   return cat;
+    // });
     res.json(cats);
   } catch (error) {
     res.status(500).json({error: 500, message: error.message});
@@ -19,7 +19,6 @@ const getCatList = async (req, res) => {
 };
 
 const getCat = async (req, res) => {
-  //console.log(req.params);
   // convert id value to number
   const catId = Number(req.params.id);
   // check if number is not an integer
@@ -29,77 +28,84 @@ const getCat = async (req, res) => {
   }
   // TODO: wrap to try-catch
   const [cat] = await catModel.getCatById(catId);
-  console.log('getCat', cat);
+  // console.log('getCat', cat);
   if (cat) {
     res.json(cat);
   } else {
-    // send response 404 if id not found in array 
+    // send response 404 if id not found in array
     // res.sendStatus(404);
-    res.status(404).json({message: 'Cat not found.'})
+    res.status(404).json({message: 'Cat not found.'});
   }
 };
 
 const postCat = async (req, res) => {
-  if(!req.file){
+  // console.log('posting a cat', req.body, req.file);
+  if (!req.file) {
     res.status(400).json({
       status: 400,
       message: 'Invalid or missing image file'
     });
-      return;
+    return;
   }
-  console.log('posting a cat', req.body, req.file);
-  const validationError = validationResult(req);
-  if(!validationError.isEmpty()){
-    res.status(400).json({status: 400,
-      errors: validationError.array(),
-      message: 'Invalid data'
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(400).json({
+      status: 400,
+      errors: validationErrors.array(),
+      message: 'Invalid post data'
     });
-      return;
+    return;
   }
-  // add cat details to cats array
-  try{
-
-    const newCat = req.body;
-    newCat.filename = req.file.filename;
-    // TODO: add try-catch
+  const newCat = req.body;
+  newCat.filename = req.file.filename;
+  // use req.user (extracted from token by passport) to add correct owner id
+  // NOTE: owner field must not be validated anymore in cat route when uploading cats
+  newCat.owner = req.user.user_id;
+  await makeThumbnail(req.file.path, newCat.filename);
+  try {
     const result = await catModel.insertCat(newCat);
-    // send correct response if upload successful
     res.status(201).json({message: 'new cat added!'});
-  }catch(error){
+  } catch (error) {
     res.status(500).json({error: 500, message: error.message});
   }
 };
 
-
 const putCat = async (req, res) => {
   // console.log('modifying a cat', req.body);
-  const validationError = validationResult(req);
-  if(!validationError.isEmpty()){
-    res.status(400).json({status: 400,
-      errors: validationError.array(),
-      message: 'Invalid Data'
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    res.status(400).json({
+      status: 400,
+      errors: validationErrors.array(),
+      message: 'Invalid PUT data'
     });
-      return;
+    return;
   }
-  // TODO: add try-catch
-  try{
-    const cat = req.body;
-    const result = await catModel.modifyCat(cat);
-    res.status(200).json({message: 'Cat modified!'});
-      // send correct response if upload successful
-  }catch(error){
+  const cat = req.body;
+  // for now owner is always the logged in user (read from token)
+  cat.owner = req.user.user_id;
+  // Note the two alternatives for passing the cat id in router
+  if (req.params.id) {
+    cat.id = parseInt(req.params.id);
+  }
+  try {
+    console.log('updating a cat', req.body);
+    // only owner of the cat can update it's data (req.user.user_id == cat.owner)
+    // checked in catModel with sql query
+    const result = await catModel.modifyCat(cat, req.user.user_id);
+    res.status(200).json({message: 'cat modified!'});
+  } catch (error) {
     res.status(500).json({error: 500, message: error.message});
   }
 };
 
 const deleteCat = async (req, res) => {
   // console.log('deleting a cat', req.params.id);
-  console.log('deleting a cat', req.params.id);
-  try{
-    const result = await catModel.deleteCat(req.params.id);
-    // send correct response if upload successful
-    res.status(200).json('cat deleted!');
-  }catch(error){
+  try {
+    // only owner of the cat can delete it (TODO: or admin)
+    const result = await catModel.deleteCat(req.params.id, req.user.user_id);
+    res.status(200).json({message: 'cat deleted!'});
+  } catch (error) {
     res.status(500).json({error: 500, message: error.message});
   }
 };

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="utf8">
+    <title>Example</title>
+    <link href="../css/log_reg.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="home.html">Homepage</a></li>
+                <li><a href="post.html">Post</a></li>
+                <li><a href="seen.html">Seen</a></li>
+                <li><a id="profile"  style="display: none;" href="profile.html">Profile</a></li>
+                <li><a id="logout" href="logout.html">Logout</a></li>
+                <li><a class="active" href="login.html">Login & reqister</a></li>
+            </ul>
+        </nav>
+        <div class="forms">
+            <div class="form-wrapper-login" id="login-wrapper">
+                <h3>Login</h3>
+                <form id="login-form" class="light-border" method="post">
+                    <div>
+                        <label>Email:</label>
+                        <input class="light-border" type="text" name="username" />
+                    </div>
+                    <div>
+                        <label>Password:</label>
+                        <input class="light-border" type="password" name="password" />
+                    </div>
+                    <div>
+                        <button class="light-border" type="submit">Log In</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-wrapper-register">
+                <h3>Register</h3>
+                <form action="http://localhost:3000/auth/register" method="post" class="light-border"
+                    id="add-user-form">
+                    <input class="light-border" type="text" name="FirstName" placeholder="FirstName">
+                    <input class="light-border" type="text" name="LastName" placeholder="LastName">
+                    <input class="light-border" type="text" name="email" placeholder="email">
+                    <input class="light-border" type="password" name="passwd" placeholder="Password">
+                    <button class="light-border" type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="../js/serialize.js"></script>
+    <script src="../js/loggedInUser.js"></script>
+    <script type="module" src="../js/login.js"></script>
+
+</body>
+
+</html>
